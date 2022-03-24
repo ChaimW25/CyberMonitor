@@ -10,7 +10,8 @@ import re
 SERCIVE_LIST = "serviceList.log"
 STATUS_LOG = "Status_Log.log"
 serviceDict = {}
-TEMP = "tenp.txt"
+TEMP = "temp.txt"
+DATES = "date.txt"
 
 # def is_service_running(name):
 #     with open(os.devnull, 'wb') as hide_output:
@@ -20,9 +21,18 @@ TEMP = "tenp.txt"
 
 def linux():
 
+    file = open(SERCIVE_LIST, 'a')
+
+    file2 = open(DATES, 'a')
+    date_location = file.tell()
+    now = datetime.now()
+    currTime = now.strftime("%Y-%m-%d %H:%M:%S")
+    sl = currTime + "~" + str(date_location)
+    file2.write(sl + "\n")
+
+    file.write("The time and date: ")
     os.system("date +%Y-%m-%d,%H:%M:%S >> {}".format(SERCIVE_LIST))
     status = os.system("service --status-all | grep + >> {}".format(SERCIVE_LIST))
-    file = open(TEMP, 'w')
     file1 = open(STATUS_LOG, 'a')
     os.system("service --status-all >> {}".format(TEMP))
     with open(TEMP) as file:
@@ -51,6 +61,12 @@ def windows():
  currTime=now.strftime("%Y-%m-%d %H:%M:%S")
  print("\nThe time and date: {} \n".format(currTime))
  file.write("The time and date: {} \n".format(currTime))
+
+ file2 = open(DATES, 'a')
+ date_location = file.tell()
+ sl = currTime + "~" + str(date_location)
+ file2.write(sl + "\n")
+
  for service in psutil.win_service_iter():
   service_name = service.name()
   print(service_name)
