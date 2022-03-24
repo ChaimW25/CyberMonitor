@@ -10,6 +10,8 @@ import re
 SERCIVE_LIST = "serviceList.log"
 STATUS_LOG = "Status_Log.log"
 serviceDict = {}
+TEMP = "tenp.txt"
+
 # def is_service_running(name):
 #     with open(os.devnull, 'wb') as hide_output:
 #         exit_code = subprocess.Popen(['service', name, 'status'], stdout=hide_output, stderr=hide_output).wait()
@@ -20,6 +22,25 @@ def linux():
 
     os.system("date +%Y-%m-%d,%H:%M:%S >> {}".format(SERCIVE_LIST))
     status = os.system("service --status-all | grep + >> {}".format(SERCIVE_LIST))
+    file = open(TEMP, 'w')
+    file1 = open(STATUS_LOG, 'a')
+    os.system("service --status-all >> {}".format(TEMP))
+    with open(TEMP) as file:
+        for line in file:
+            size1 = line.find("[", 1)
+            service_status = "running" if line [size1+2]=='+' else "stopped"
+            service_name = line[size1+7:len(line)-1]
+            if serviceDict.get(service_name) == None:
+                s = "new service:" + service_name
+                file1.write(s + "\n")
+            else:
+                sta = serviceDict[service_name]
+                if service_status != sta:
+                    s = service_status + ": " + service_name
+                    file1.write(s + "\n")
+            serviceDict[service_name] = service_status
+
+    print('\ntext file to dictionary=\n', serviceDict)
     print(status)
 
 
@@ -40,7 +61,7 @@ def windows():
   else:
       sta = serviceDict[service_name]
       if service_status != sta:
-          s = service_status + service_name
+          s = service_status + ": " + service_name
           file1.write(s + "\n")
   serviceDict[service_name] = service_status
   if service.status()== "running":
@@ -52,7 +73,7 @@ def windows():
      print("            ")
 
 
-if _name_ == '_main_':
+if __name__ == '__main__':
  status = platform.system() # print if window or linux
  print(status)
 
