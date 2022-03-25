@@ -1,3 +1,4 @@
+import difflib
 import platform
 import subprocess
 import os
@@ -6,40 +7,64 @@ from os.path import exists
 import psutil
 from datetime import datetime
 
+from monitor import monitor
+
 SERCIVE_LIST = "serviceList.log"
 DATES = "date.txt"
 
-file = open(SERCIVE_LIST, 'a')
-file=open(DATES,'a')
+class manualMonitor:
+    def __init__(self, monitor):
+        self.mon=monitor
 
-now = datetime.now()
-currTime = now.strftime("%Y-%m-%d %H:%M:%S")
-strtDate = input("Please enter start time")
-endDate = input("Please enter end time")
 
-times=[]
-times.append("0")
-i=1
-dateObj=[]
-for line in DATES:
-    times.append(line.split('~'))
-    dateObj.append(datetime.strptime(times[2*i-1], '%y-%m-%d,%H:%M:%S'))
-    i+=1
+    file1 = open(SERCIVE_LIST, 'r')
+    lines1 = file1.readlines()
 
-strtDate=datetime.strptime(strtDate, '%y-%m-%d,%H:%M:%S')
-endDate=datetime.strptime(endDate, '%y-%m-%d,%H:%M:%S')
+    file2=open(DATES,'r')
+    lines2 = file1.readlines()
 
-i=1
-for date in dateObj:
-    if strtDate<date:
-        strtTime=i*2
-        break
-for date in dateObj:
-    if endDate<date:
-        endTime=i*2
-        break
+    now = datetime.now()
+    currTime = now.strftime("%Y-%m-%d %H:%M:%S")
+    strtDate = input("Please enter start time in this format '22-03-25 12:35:14' : ")
+    endDate = input("Please enter end time in this format: '22-03-25 12:35:14' : ")
 
-    # //now we got in strtTime the line of the startTime monitor in serviceList.log
-    # //and in endTime the line of the endTime in serviceList.log
-    # //we just need to compare between the both row by row (sort by alpha bet) with pointers
+    times=[]
+    times.append("0")
+    i=1
+    dateObj=[]
+    for line in lines2:
+        times.append(line.split('~'))
+        dateObj.append(datetime.strptime(times[2*i-1], '%y-%m-%d,%H:%M:%S'))
+        i+=1
 
+    strtDate=datetime.strptime(strtDate, '%m/%d/%y,%H:%M:%S')
+    endDate=datetime.strptime(endDate, '%y-%m-%d,%H:%M:%S')
+
+    i=1
+    for date in dateObj:
+        if strtDate<date:
+            strtTime=i*2
+            break
+    for date in dateObj:
+        if endDate<date:
+            endTime=i*2
+            break
+
+    with open('file1.txt') as file_1:
+        file_1_text = file_1.readlines()
+
+    with open('file2.txt') as file_2:
+        file_2_text = file_2.readlines()
+
+    # Find and print the diff:
+    for line in difflib.unified_diff(file_1_text, file_2_text, fromfile='serviceList.log',
+            tofile='serviceList.log', lineterm=''):
+        print(line)
+
+if __name__ == '__main__':
+    m= monitor
+    mm=manualMonitor(m)
+    manualMonitor()
+
+# 2022-03-25 12:35:56
+# 2022-03-25 12:35:59
