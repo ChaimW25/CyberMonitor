@@ -112,7 +112,7 @@ class Gui:
         self.date_end_entry.place(x=255, y=30)
         ttk.Button(self.frameManual, text="ok", width=7, command=self.manual).place(x=450, y=15)
 
-    #take care for input values of manualMonitor and calulate it
+    #take care for input values of manualMonitor and send it to startManual
     def manual(self):
         datestart = self.date_start_entry.get()
         size = datestart.find("/",3)
@@ -129,6 +129,8 @@ class Gui:
         secend = self.secstr_end.get()
         end = dateend +' ' +hourend+":"+minend+":"+secend
         threading.Thread(target=self.startManual,args=(start,end)).start()
+
+    #send the inputs to manualMonitor
     def startManual(self,start,end):
         s = self.manu.start(start,end)
         self.msg_label.config(state='normal')
@@ -137,20 +139,21 @@ class Gui:
         self.msg_label.insert('end', "\n")
         self.msg_label.config(state='disable')
 
-
+    #insert the service values to the fields
     def recvManual(self):
             if len(self.m.listOfServices) != 0:
                 temp = self.m.listOfServices.pop(0)
                 self.service+=temp
                 self.service+="\n"
                 self.print(temp)
-
+    #print the input text in the Gui screen
     def print(self, mes):
         self.msg_label1.config(state='normal')
         self.msg_label1.insert('end', mes)
         self.msg_label1.yview('end')
         self.msg_label1.insert('end', "\n")
         self.msg_label1.config(state='disable')
+    #send the service list to print func for printing
     def recv(self):
         while self.stop_thread:
             if len(self.m.listOfServices) != 0:
