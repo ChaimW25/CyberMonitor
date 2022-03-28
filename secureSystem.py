@@ -27,6 +27,7 @@ def openFileMonitor(fernet):
     decrypted = fernet.decrypt(encrypted)
     with open('monitor.py', 'wb') as dec_file:
         dec_file.write(decrypted)
+
 if __name__ == '__main__':
     key = Fernet.generate_key()
     fernet = Fernet(key)
