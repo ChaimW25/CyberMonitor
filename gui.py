@@ -72,14 +72,19 @@ class Gui:
                 print("dd")
                 w = Tk()
                 w.geometry("300x300")
-                msg_label = Text(self.frameManual)
-                msg_label.place(x=10, y=50, width=570, height=530)
-                msg_label.config(state="disabled")
-                self.msg_label1.config(state='normal')
-                self.msg_label1.insert('end', self.m.wo.pop())
-                self.msg_label1.yview('end')
-                self.msg_label1.insert('end', "\n")
-                self.msg_label1.config(state='disable')
+
+                l = Label(w, text="You've been attacked!!!")
+                l.config(font=("Courier", 14))
+                l.pack()
+
+                # msg_label = Text(self.frameManual)
+                # msg_label.place(x=10, y=50, width=570, height=530)
+                # msg_label.config(state="disabled")
+                # msg_label.config(state='normal')
+                # msg_label.insert('end', self.m.wo.pop())
+                # msg_label.yview('end')
+                # msg_label.insert('end', "\n")
+                # msg_label.config(state='disable')
                 w.mainloop()
 
     def exit(self):

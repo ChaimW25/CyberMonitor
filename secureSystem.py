@@ -2,7 +2,7 @@ import os
 from os.path import exists
 
 from cryptography.fernet import Fernet
-KEY_FILE = "a.txt"
+KEY_FILE = "key.txt"
 
 
 def openFileGui(fernet):
