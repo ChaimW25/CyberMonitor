@@ -92,12 +92,17 @@ class Gui:
 
     def manual(self):
         datestart = self.date_start_entry.get()
+        size = datestart.find("/",3)
+        datestart=datestart[0:size+1]+"20"+datestart[size+1:len(datestart)]
+        print(datestart)
         hourstart = self.hourstr_start.get()
         minstart = self.minstr_start.get()
         secstart = self.secstr_start.get()
         start = datestart + ' ' +  hourstart+":"+minstart+":"+secstart
         print(start)
         dateend = self.date_end_entry.get()
+        size = dateend.find("/",3)
+        dateend=dateend[0:size+1]+"20"+dateend[size+1:len(dateend)]
         hourend = self.hourstr_end.get()
         minend= self.minstr_end.get()
         secend = self.secstr_end.get()

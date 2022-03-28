@@ -44,11 +44,11 @@ class manualMonitor:
         # print(times[2*1-1])
         datetime1=times[2*1-1][0]
         # print(datetime1)
-        dateObj.append(datetime.strptime(datetime1, "%Y/%d/%m %H:%M:%S"))
+        dateObj.append(datetime.strptime(datetime1, "%Y/%m/%d %H:%M:%S"))
         i+=1
      #convert the input daes to our format-not necessary
-     strtDate=datetime.strptime(strtDate, "%d/%m/%Y %H:%M:%S")
-     endDate=datetime.strptime(endDate, "%d/%m/%Y %H:%M:%S")
+     strtDate=datetime.strptime(strtDate, "%m/%d/%Y %H:%M:%S")
+     endDate=datetime.strptime(endDate, "%m/%d/%Y %H:%M:%S")
 
      i=1
      #saving the user first time- start and end index pos range in the file
@@ -112,9 +112,11 @@ class manualMonitor:
      for key in serviceDict1:
         if serviceDict2.get(key) == None:
             str += "The service {} stopped".format(key[0:(len(key)-1)])
+            str += '\n'
      for key in serviceDict2:
         if serviceDict1.get(key)==None:
             str += "The service {} begin".format(key[0:(len(key)-1)])
+            str += '\n'
      print(str)
      return str
 
