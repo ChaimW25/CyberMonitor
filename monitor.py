@@ -73,16 +73,19 @@ class monitor:
      file = open(SERCIVE_LIST, 'a')
      file1 = open(STATUS_LOG, 'a')
      file2 = open(DATES, 'a')
+     #holds the current time and insert it into the file
      now = datetime.now()
      currTime = now.strftime("%Y/%m/%d %H:%M:%S")
      sl = currTime + "~" + str(self.location)
      file2.write(sl + "\n")
-     file2.write(sl + "\n")
+     # file2.write(sl + "\n")
      file.write(currTime+"\n")
      self.location = self.location + 1
+     #iterate over all the services
      for service in psutil.win_service_iter():
         service_name = service.name()
         service_status = service.status()
+        #if there's any new service -> write it into status_Log
         if serviceDict.get(service_name) == None:
             s = service_status + ": " + service_name
             file1.write(s + "\n")
@@ -90,17 +93,19 @@ class monitor:
 
         else:
             sta = serviceDict[service_name]
+            # if there's any changes -> write it into status_Log
             if service_status != sta:
                 s = service_status + ": " + service_name
                 file1.write(s + "\n")
                 self.listOfServices.append(s)
         serviceDict[service_name] = service_status
+        #write the running services into serviceList
         if service.status() == "running":
             # s = service_name+ "   |   " + service_status
             file.write(service_name + "\n")
             self.location=self.location+1
 
-
+    #insert a commit number for file
     def sha1(self,filename):
         BUF_SIZE = 65536  # read stuff in 64kb chunks!
         sha1 = hashlib.sha1()
@@ -111,6 +116,9 @@ class monitor:
                     break
                 sha1.update(data)
         return sha1.hexdigest()
+
+    #compare for updates between old file and new file- if there's a change it gets a
+    # new commit word -> and print notification for changes
     def start(self,timeUnit):
         status = platform.system()  # print if window or linux
         while not self.stop:

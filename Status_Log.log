@@ -280,5 +280,3 @@ stopped: UdkUserSvc_391a524
 running: UnistoreSvc_391a524
 running: UserDataSvc_391a524
 running: WpnUserService_391a524
-running: WaaSMedicSvc
-running: wuauserv
