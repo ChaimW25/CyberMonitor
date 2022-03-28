@@ -3,7 +3,9 @@ from tkcalendar import Calendar, DateEntry
 from tkinter import ttk, Tk, Entry, Label, Text, END, Frame, RIGHT, Y, StringVar, Spinbox, Button
 from monitor import *
 from manualMonitor import *
+
 class Gui:
+    #init the Gui details
     def __init__(self):
         self.service = ""
         self.change  = False
@@ -42,6 +44,7 @@ class Gui:
         self.scrollbar.pack(side=RIGHT, fill=Y)
         self.window.mainloop()
 
+    #present the monitor screen and details
     def monitorShow(self):
         self.frameManual.pack_forget()
         self.frameMonitor.pack(side="top", expand=True, fill="both")
@@ -60,12 +63,16 @@ class Gui:
             ttk.Button(self.frameMonitor, text="exit", width=10, command=self.exit).place(x=430, y=5)
         else:
             Button(self.frameMonitor, text="ok", width=7, command=self.monitor).place(x=430, y=5)
+
+    #running 3 threads in parallel: of start-time, of income warnings, of income info to show
     def monitor(self):
         self.time = int(self.time_text.get())
         threading.Thread(target=self.start).start()
         threading.Thread(target=self.warning).start()
         threading.Thread(target=self.recv).start()
         ttk.Button(self.frameMonitor, text="exit", width=10, command=self.exit).place(x=430, y=5)
+
+    #open a new window with warning msg if there's changes in files
     def warning(self):
         while self.stop_thread:
             if len(self.m.warning)!=0:
@@ -76,25 +83,19 @@ class Gui:
                 l = Label(w, text="You've been attacked!!!")
                 l.config(font=("Courier", 14))
                 l.pack()
-
-                # msg_label = Text(self.frameManual)
-                # msg_label.place(x=10, y=50, width=570, height=530)
-                # msg_label.config(state="disabled")
-                # msg_label.config(state='normal')
-                # msg_label.insert('end', self.m.wo.pop())
-                # msg_label.yview('end')
-                # msg_label.insert('end', "\n")
-                # msg_label.config(state='disable')
                 w.mainloop()
 
+    #exit and stop the program
     def exit(self):
         self.stop_thread = False
         self.m.stopMonitor()
         exit(0)
 
+    #start the monitor
     def start(self):
         self.m.start(self.time)
 
+    #present the screen of manualShow button
     def manualShow(self):
         self.frameMonitor.pack_forget()
         self.msg_label = Text(self.frameManual)
@@ -111,6 +112,7 @@ class Gui:
         self.date_end_entry.place(x=255, y=30)
         ttk.Button(self.frameManual, text="ok", width=7, command=self.manual).place(x=450, y=15)
 
+    #take care for input values of manualMonitor and calulate it
     def manual(self):
         datestart = self.date_start_entry.get()
         size = datestart.find("/",3)
