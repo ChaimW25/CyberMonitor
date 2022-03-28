@@ -4,6 +4,8 @@ import time
 from os.path import exists
 import psutil
 from datetime import datetime
+import hashlib
+
 
 SERCIVE_LIST = "serviceList.log"
 STATUS_LOG = "Status_Log.log"
@@ -16,10 +18,11 @@ DATES = "date.txt"
 
 class monitor:
 
-    def __init__(self,slist=None, stop=None,location=0):
+    def __init__(self,slist=None, wo=None, stop=None,location=0):
         self.location=location
         self.slist = []
         self.stop = False
+        self.wo = []
         if exists(SERCIVE_LIST):
             os.remove(SERCIVE_LIST)
         # file = open(SERCIVE_LIST, 'a')
@@ -32,7 +35,7 @@ class monitor:
         file2 = open(DATES, 'a')
         date_location = file.tell()
         now = datetime.now()
-        currTime = now.strftime("%Y-%m-%d %H:%M:%S")
+        currTime = now.strftime("%Y/%m/%d %H:%M:%S")
         sl = currTime + "~" + str(date_location)
         file2.write(sl + "\n")
         file.write("The time and date: ")
@@ -57,7 +60,6 @@ class monitor:
                     self.slist.append(s)
             serviceDict[service_name] = service_status
          print('\ntext file to dictionary=\n', serviceDict)
-         print(status)
 
 
     def windows(self):
@@ -67,9 +69,9 @@ class monitor:
      now = datetime.now()
      currTime = now.strftime("%Y/%m/%d %H:%M:%S")
      # date_location = file.tell()
-     print(self.location)
      # sl = currTime + "~" + str(date_location)
      sl = currTime + "~" + str(self.location)
+     file2.write(sl + "\n")
      file2.write(sl + "\n")
      # print("\nThe time and date: {} \n".format(currTime))
      file.write(currTime+"\n")
@@ -99,15 +101,36 @@ class monitor:
             service_description = service.description()
             # print(service_description)
             # print("            ")
+
+    def sha1(self,filename):
+        BUF_SIZE = 65536  # read stuff in 64kb chunks!
+        sha1 = hashlib.sha1()
+        with open(filename, 'rb') as f:
+            while True:
+                data = f.read(BUF_SIZE)
+                if not data:
+                    break
+                sha1.update(data)
+        return sha1.hexdigest()
     def start(self,timeUnit):
         status = platform.system()  # print if window or linux
-        print(status)
         while not self.stop:
             if (status == "Windows"):
                 self.windows()
+                commitFile1 = self.sha1(SERCIVE_LIST)
+                commitFile2 = self.sha1(STATUS_LOG)
             else:
                 self.linux()
+                commitFile1 = self.sha1(SERCIVE_LIST)
+                commitFile2 = self.sha1(STATUS_LOG)
             time.sleep(timeUnit)
+            commitFile3 = self.sha1(SERCIVE_LIST)
+            commitFile4 = self.sha1(STATUS_LOG)
+            if commitFile1 != commitFile3:
+                self.wo.append("The file is different")
+                print("The file is different")
+            if commitFile2 != commitFile4:
+                self.wo.append("The file is different")
 
     def stopMonitor(self):
         self.stop = True

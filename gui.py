@@ -63,8 +63,24 @@ class Gui:
     def monitor(self):
         self.time = int(self.time_text.get())
         threading.Thread(target=self.start).start()
+        threading.Thread(target=self.warning).start()
         threading.Thread(target=self.recv).start()
         ttk.Button(self.frameMonitor, text="exit", width=10, command=self.exit).place(x=430, y=5)
+    def warning(self):
+        while self.stop_thread:
+            if len(self.m.wo)!=0:
+                print("dd")
+                w = Tk()
+                w.geometry("300x300")
+                msg_label = Text(self.frameManual)
+                msg_label.place(x=10, y=50, width=570, height=530)
+                msg_label.config(state="disabled")
+                self.msg_label1.config(state='normal')
+                self.msg_label1.insert('end', self.m.wo.pop())
+                self.msg_label1.yview('end')
+                self.msg_label1.insert('end', "\n")
+                self.msg_label1.config(state='disable')
+                w.mainloop()
 
     def exit(self):
         self.stop_thread = False
@@ -94,12 +110,10 @@ class Gui:
         datestart = self.date_start_entry.get()
         size = datestart.find("/",3)
         datestart=datestart[0:size+1]+"20"+datestart[size+1:len(datestart)]
-        print(datestart)
         hourstart = self.hourstr_start.get()
         minstart = self.minstr_start.get()
         secstart = self.secstr_start.get()
         start = datestart + ' ' +  hourstart+":"+minstart+":"+secstart
-        print(start)
         dateend = self.date_end_entry.get()
         size = dateend.find("/",3)
         dateend=dateend[0:size+1]+"20"+dateend[size+1:len(dateend)]
@@ -107,7 +121,6 @@ class Gui:
         minend= self.minstr_end.get()
         secend = self.secstr_end.get()
         end = dateend +' ' +hourend+":"+minend+":"+secend
-        print(end)
         threading.Thread(target=self.startManual,args=(start,end)).start()
     def startManual(self,start,end):
         s = self.manu.start(start,end)
