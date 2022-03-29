@@ -28,6 +28,8 @@ class monitor:
             os.remove(SERCIVE_LIST)
         if exists(STATUS_LOG):
             os.remove(STATUS_LOG)
+        if exists(DATES):
+            os.remove(DATES)
     # method for monitoring in linux
     def linux(self):
         file = open(SERCIVE_LIST, 'a')

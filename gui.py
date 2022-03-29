@@ -16,6 +16,7 @@ class Gui:
         self.frameManual = Frame(self.window)
         self.window.geometry("600x600")
         self.window.configure(bg="lightgray")
+        self.window.title("monitor")
         self.time_text = Entry(self.frameMonitor)
         self.time=""
         self.stop_thread = True
@@ -79,6 +80,7 @@ class Gui:
                 print("dd")
                 w = Tk()
                 w.geometry("300x300")
+                w.title("warning")
 
                 l = Label(w, text="You've been attacked!!!")
                 l.config(font=("Courier", 14))
@@ -133,11 +135,12 @@ class Gui:
     #send the inputs to manualMonitor
     def startManual(self,start,end):
         s = self.manu.start(start,end)
-        self.msg_label.config(state='normal')
-        self.msg_label.insert('end', s)
-        self.msg_label.yview('end')
-        self.msg_label.insert('end', "\n")
-        self.msg_label.config(state='disable')
+        if s!=None:
+            self.msg_label.config(state='normal')
+            self.msg_label.insert('end', s)
+            self.msg_label.yview('end')
+            self.msg_label.insert('end', "\n")
+            self.msg_label.config(state='disable')
 
     #insert the service values to the fields
     def recvManual(self):
