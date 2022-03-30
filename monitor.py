@@ -11,6 +11,7 @@ SERCIVE_LIST = "serviceList.log"
 STATUS_LOG = "Status_Log.log"
 serviceDict = {}
 TEMP = "temp.txt"
+TEMP2 = "tempserviceList.txt"
 DATES = "date.txt"
 
 
@@ -33,28 +34,30 @@ class monitor:
     # method for monitoring in linux
     def linux(self):
         file = open(SERCIVE_LIST, 'a')
+        if exists(TEMP2):
+            os.remove(TEMP2)
         file2 = open(DATES, 'a')
-        date_location = file.tell()
         #holds the value of the current time
         now = datetime.now()
         currTime = now.strftime("%Y/%m/%d %H:%M:%S")
         #holds the time and the current pos of the serviceList file
-        sl = currTime + "~" + str(date_location)
+        sl = currTime + "~" + str(self.location)
         file2.write(sl + "\n")
-        file.write("The time and date: ")
+        self.location = self.location + 1
+      #  file.write("The time and date: ")
         os.system("date +%Y/%m/%d,%H:%M:%S >> {}".format(SERCIVE_LIST))
         #gets the updated status of all the running services in the operating system
-        status = os.system("service --status-all | grep + >> {}".format(SERCIVE_LIST))
-
-        with open(SERCIVE_LIST) as file:
-            for line in file:
-                size1 = line.find("[", 1)
-                service_status = "running"
-                service_name = line[size1 + 7:len(line) - 1]
-                s = service_status + ": " + service_name
-                file.write(s + "\n")
-
-
+        status = os.system("service --status-all | grep + >> {}".format(TEMP2))
+        fileTemp = open(TEMP2, 'r')
+        lines = fileTemp.readlines()
+        file = open(SERCIVE_LIST, 'a')
+        for line in lines:
+             size1 = line.find("[", 1)
+             service_status = "running"
+             service_name = line[size1 + 7:len(line) - 1]
+             s = service_name
+             file.write(s + "\n")
+             self.location=self.location+1
         file1 = open(STATUS_LOG, 'a')
         #gets the updated status of all the services
         os.system("service --status-all >> {}".format(TEMP))
