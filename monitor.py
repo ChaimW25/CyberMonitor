@@ -45,6 +45,16 @@ class monitor:
         os.system("date +%Y/%m/%d,%H:%M:%S >> {}".format(SERCIVE_LIST))
         #gets the updated status of all the running services in the operating system
         status = os.system("service --status-all | grep + >> {}".format(SERCIVE_LIST))
+
+        with open(SERCIVE_LIST) as file:
+            for line in file:
+                size1 = line.find("[", 1)
+                service_status = "running"
+                service_name = line[size1 + 7:len(line) - 1]
+                s = service_status + ": " + service_name
+                file.write(s + "\n")
+
+
         file1 = open(STATUS_LOG, 'a')
         #gets the updated status of all the services
         os.system("service --status-all >> {}".format(TEMP))

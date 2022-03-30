@@ -24,7 +24,7 @@ running: camsvc
 running: CDPSvc
 stopped: CertPropSvc
 running: ClickToRunSvc
-stopped: ClipSVC
+running: ClipSVC
 stopped: cloudidsvc
 stopped: COMSysApp
 running: CoreMessagingRegistrar
@@ -66,9 +66,9 @@ stopped: fdPHost
 stopped: FDResPub
 stopped: fhsvc
 running: FontCache
-stopped: FrameServer
+running: FrameServer
 stopped: GoogleChromeElevationService
-stopped: gpsvc
+running: gpsvc
 stopped: GraphicsPerfSvc
 stopped: gupdate
 stopped: gupdatem
@@ -167,7 +167,7 @@ stopped: SharedAccess
 stopped: SharedRealitySvc
 running: ShellHWDetection
 stopped: shpamsvc
-stopped: smphost
+running: smphost
 stopped: SmsRouter
 stopped: SNMPTRAP
 stopped: spectrum
@@ -193,7 +193,7 @@ running: TimeBrokerSvc
 running: TokenBroker
 running: TrkWks
 stopped: TroubleshootingSvc
-stopped: TrustedInstaller
+running: TrustedInstaller
 stopped: tzautoupdate
 stopped: UevAgentService
 stopped: uhssvc
@@ -241,7 +241,7 @@ running: WinDefend
 running: WinHttpAutoProxySvc
 running: Winmgmt
 stopped: WinRM
-stopped: wisvc
+running: wisvc
 running: WlanSvc
 running: wlidsvc
 stopped: wlpasvc
@@ -257,12 +257,12 @@ running: wscsvc
 running: WSearch
 running: wuauserv
 stopped: WwanSvc
-stopped: XblAuthManager
+running: XblAuthManager
 stopped: XblGameSave
 stopped: XboxGipSvc
 stopped: XboxNetApiSvc
 running: AarSvc_391a524
-stopped: BcastDVRUserService_391a524
+running: BcastDVRUserService_391a524
 stopped: BluetoothUserService_391a524
 running: CaptureService_391a524
 running: cbdhsvc_391a524
@@ -280,3 +280,10 @@ stopped: UdkUserSvc_391a524
 running: UnistoreSvc_391a524
 running: UserDataSvc_391a524
 running: WpnUserService_391a524
+stopped: wisvc
+stopped: TrustedInstaller
+stopped: XblAuthManager
+stopped: wlidsvc
+running: wlidsvc
+running: sppsvc
+stopped: sppsvc
