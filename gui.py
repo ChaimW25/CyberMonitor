@@ -75,15 +75,19 @@ class Gui:
 
     #open a new window with warning msg if there's changes in files
     def warning(self):
+        i = 0
         while self.stop_thread:
-            if len(self.m.warning)!=0:
-                print("dd")
-                w = Tk()
-                w.geometry("300x300")
-                w.title("warning")
-                l = Label(w, text="You've been attacked!!!")
-                l.config(font=("Courier", 14))
-                l.pack()
+            if len(self.m.warning) != 0:
+                if i == 0:
+                    print("dd")
+                    w = Tk()
+                    w.geometry("300x300")
+                    w.title("warning")
+                    l = Label(w, text="You've been attacked!!!")
+                    l.config(font=("Courier", 14))
+                    l.pack()
+                    Button(w, text="Quit", command=w.destroy).pack()
+                    i += 1
                 w.mainloop()
 
     #exit and stop the program

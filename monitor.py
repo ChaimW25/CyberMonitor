@@ -9,7 +9,6 @@ import hashlib
 #some const with the files names
 SERCIVE_LIST = "serviceList.log"
 STATUS_LOG = "Status_Log.log"
-serviceDict = {}
 TEMP = "temp.txt"
 TEMP2 = "tempserviceList.txt"
 DATES = "date.txt"
@@ -20,6 +19,7 @@ DATES = "date.txt"
 class monitor:
     #init the monitor fields
     def __init__(self,slist=None, wo=None, stop=None,location=0):
+        self.serviceDict = {}
         self.location=location
         self.listOfServices = []
         self.stop = False
@@ -60,29 +60,46 @@ class monitor:
              self.location=self.location+1
         file1 = open(STATUS_LOG, 'a')
         #gets the updated status of all the services
-        os.system("service --status-all >> {}".format(TEMP))
+        os.system("service --status-all | grep + >> {}".format(TEMP))
+        serviceHelp={}
         with open(TEMP) as file:
         #save each service name and status
          for line in file:
             size1 = line.find("[", 1)
-            service_status = "running" if line[size1 + 2] == '+' else "stopped"
+            service_status = "running"
             service_name = line[size1 + 7:len(line) - 1]
             #if the service is new
-            if serviceDict.get(service_name) == None:
-                s = service_status+ ": "  + service_name
+            serviceHelp[service_name] = service_status
+
+        for i, j in serviceHelp.items():
+            if self.serviceDict.get(i) == None:
+                self.serviceDict[i] = j
+                s = j + ": " +i
                 file1.write(s + "\n")
                 self.listOfServices.append(s)
-            #if the service isn't new
-            else:
-                sta = serviceDict[service_name]
-                #if the status changed
-                if service_status != sta:
-                    s = service_status + ": " + service_name
-                    file1.write(s + "\n")
-                    self.listOfServices.append(s)
-            serviceDict[service_name] = service_status
-         # print('\ntext file to dictionary=\n', serviceDict)
+        for i, j in self.serviceDict.items():
+            if serviceHelp.get(i) == None:
+                self.serviceDict[i] = "stopped"
+                s = "stopped"+ ": " +i
+                file1.write(s + "\n")
+                self.listOfServices.append(s)
 
+        print(serviceHelp)
+        print(self.serviceDict)
+
+        #     if self.serviceDict.get(service_name) == None:
+        #         serviceHelp[service_name]=service_status
+        #     #if the service isn't new
+        #     else:
+        #         sta = self.serviceDict[service_name]
+        #         #if the status changed
+        #         if service_status != sta:
+        #             serviceHelp[service_name] = service_status
+        #  # print('\ntext file to dictionary=\n', serviceDict)
+        # for i,j in serviceHelp.items():
+        #     s = j + ": " + i
+        #     file1.write(s + "\n")
+        #     self.listOfServices.append(s)
     #method for monitoring in windows
     def windows(self):
      file = open(SERCIVE_LIST, 'a')
@@ -101,19 +118,19 @@ class monitor:
         service_name = service.name()
         service_status = service.status()
         #if there's any new service -> write it into status_Log
-        if serviceDict.get(service_name) == None:
+        if self.serviceDict.get(service_name) == None:
             s = service_status + ": " + service_name
             file1.write(s + "\n")
             self.listOfServices.append(s)
 
         else:
-            sta = serviceDict[service_name]
+            sta = self.serviceDict[service_name]
             # if there's any changes -> write it into status_Log
             if service_status != sta:
                 s = service_status + ": " + service_name
                 file1.write(s + "\n")
                 self.listOfServices.append(s)
-        serviceDict[service_name] = service_status
+        self.serviceDict[service_name] = service_status
         #write the running services into serviceList
         if service.status() == "running":
             # s = service_name+ "   |   " + service_status
