@@ -89,7 +89,7 @@ class manualMonitor:
                 serviceDict2[lines[posA]] = "is running"
                 posA=posA+1
      print(posA , len(times))
-     if posA == len(lines)-1:
+     if posA == len(lines)-1 or posA==len(lines)-2:
             serviceDict2[lines[posA]] = "is running"
             print("dd")
 
