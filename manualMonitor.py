@@ -81,15 +81,15 @@ class manualMonitor:
      if endTime2 <len(times):
          endTime2=int(times[endTime2][1])
      else:
-         endTime2=endTime2+1
+         endTime2=endTime2
      while posA < (endTime2):
             serviceDict2[lines[posA]] = "is running"
             posA=posA+1
 
      #print the changes between the first time and second time
      str=""
-     # print(serviceDict2)
-     # print(serviceDict1)
+     print(serviceDict2)
+     print(serviceDict1)
 
      for key in serviceDict1:
         if serviceDict2.get(key) == None:
@@ -99,14 +99,14 @@ class manualMonitor:
         if serviceDict1.get(key)==None:
             str += "The service {} begin".format(key[0:(len(key)-1)])
             str += '\n'
-     print(str)
+     # print(str)
      return str
 
 if __name__ == '__main__':
-    s1="2022/03/27 19:55:54"
-    s2="2022/03/27 19:57:00"
+    s1="03/30/2022 01:52:54"
+    s2="03/30/2022 03:56:54"
     m= monitor
-    mm=manualMonitor(m)
+    mm=manualMonitor()
     mm.start(s1,s2)
     # manualMonitor()
 

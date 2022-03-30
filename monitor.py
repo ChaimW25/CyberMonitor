@@ -43,10 +43,10 @@ class monitor:
         #holds the time and the current pos of the serviceList file
         sl = currTime + "~" + str(self.location)
         file2.write(sl + "\n")
-        self.location = self.location + 1
       #  file.write("The time and date: ")
         os.system("date +%Y/%m/%d,%H:%M:%S >> {}".format(SERCIVE_LIST))
         #gets the updated status of all the running services in the operating system
+        self.location = self.location + 1
         status = os.system("service --status-all | grep + >> {}".format(TEMP2))
         fileTemp = open(TEMP2, 'r')
         lines = fileTemp.readlines()
@@ -81,7 +81,7 @@ class monitor:
                     file1.write(s + "\n")
                     self.listOfServices.append(s)
             serviceDict[service_name] = service_status
-         print('\ntext file to dictionary=\n', serviceDict)
+         # print('\ntext file to dictionary=\n', serviceDict)
 
     #method for monitoring in windows
     def windows(self):
