@@ -36,6 +36,8 @@ class monitor:
         file = open(SERCIVE_LIST, 'a')
         if exists(TEMP2):
             os.remove(TEMP2)
+        if exists(TEMP):
+            os.remove(TEMP)
         file2 = open(DATES, 'a')
         #holds the value of the current time
         now = datetime.now()
@@ -70,36 +72,20 @@ class monitor:
             service_name = line[size1 + 7:len(line) - 1]
             #if the service is new
             serviceHelp[service_name] = service_status
-
         for i, j in serviceHelp.items():
-            if self.serviceDict.get(i) == None:
+            if self.serviceDict.get(i)==None or self.serviceDict.get(i)=="stopped":
                 self.serviceDict[i] = j
                 s = j + ": " +i
                 file1.write(s + "\n")
                 self.listOfServices.append(s)
         for i, j in self.serviceDict.items():
             if serviceHelp.get(i) == None:
+               if self.serviceDict.get(i) != "stopped":
                 self.serviceDict[i] = "stopped"
                 s = "stopped"+ ": " +i
                 file1.write(s + "\n")
                 self.listOfServices.append(s)
 
-        print(serviceHelp)
-        print(self.serviceDict)
-
-        #     if self.serviceDict.get(service_name) == None:
-        #         serviceHelp[service_name]=service_status
-        #     #if the service isn't new
-        #     else:
-        #         sta = self.serviceDict[service_name]
-        #         #if the status changed
-        #         if service_status != sta:
-        #             serviceHelp[service_name] = service_status
-        #  # print('\ntext file to dictionary=\n', serviceDict)
-        # for i,j in serviceHelp.items():
-        #     s = j + ": " + i
-        #     file1.write(s + "\n")
-        #     self.listOfServices.append(s)
     #method for monitoring in windows
     def windows(self):
      file = open(SERCIVE_LIST, 'a')
@@ -138,7 +124,7 @@ class monitor:
             self.location=self.location+1
 
     #insert a commit number for file
-    def sha1(self,filename):
+    def commitFun(self, filename):
         BUF_SIZE = 65536  # read stuff in 64kb chunks!
         sha1 = hashlib.sha1()
         with open(filename, 'rb') as f:
@@ -156,18 +142,17 @@ class monitor:
         while not self.stop:
             if (status == "Windows"):
                 self.windows()
-                commitFile1 = self.sha1(SERCIVE_LIST)
-                commitFile2 = self.sha1(STATUS_LOG)
+                commitFile1 = self.commitFun(SERCIVE_LIST)
+                commitFile2 = self.commitFun(STATUS_LOG)
             else:
                 self.linux()
-                commitFile1 = self.sha1(SERCIVE_LIST)
-                commitFile2 = self.sha1(STATUS_LOG)
+                commitFile1 = self.commitFun(SERCIVE_LIST)
+                commitFile2 = self.commitFun(STATUS_LOG)
             time.sleep(timeUnit)
-            commitFile3 = self.sha1(SERCIVE_LIST)
-            commitFile4 = self.sha1(STATUS_LOG)
+            commitFile3 = self.commitFun(SERCIVE_LIST)
+            commitFile4 = self.commitFun(STATUS_LOG)
             if commitFile1 != commitFile3:
                 self.warning.append("The file is different")
-                print("The file is different")
             if commitFile2 != commitFile4:
                 self.warning.append("The file is different")
 

@@ -59,7 +59,6 @@ if __name__ == '__main__':
     #use our class functions to decrypt the files back to normal if the user knows the key
     fernet = Fernet(key)
     i = input("press 0 or 1")
-    print(i)
     if i == "1":
         openFileGui(fernet)
         openFileManualMonitor(fernet)

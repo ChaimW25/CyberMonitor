@@ -34,7 +34,7 @@ class manualMonitor:
      #appending all the dates into a list
      for line in lines2:
         times.append(line.split('~'))
-        datetime1=times[2*1-1][0]
+        datetime1=times[i][0]
         dateObj.append(datetime.strptime(datetime1, "%Y/%m/%d %H:%M:%S"))
         i+=1
      #convert the input dates to our format
@@ -48,7 +48,7 @@ class manualMonitor:
      endTime=1
      endTime2=2
      for date in dateObj:
-        if strtDate>date:
+        if strtDate <= date:
             # strtTime=i*2
             strtTime=i
             # strtTime2=(i+1)*2
@@ -56,8 +56,11 @@ class manualMonitor:
             break
         i+=1
      # doing the same with the user second time
+     i=1
      for date in dateObj:
-        if endDate>date:
+
+        if endDate <= date:
+
             # endTime=i*2
             endTime=i
             endTime2=i+1
@@ -68,6 +71,9 @@ class manualMonitor:
             break
         i+=1
 
+     if i==len(times):
+             endTime=i-1
+             endTime2=len(lines1)-1
      #reading the file in the first time range and insert the sevices names into dict keys
      fileA=open(SERCIVE_LIST, 'r')
      lines = fileA.readlines()
@@ -75,28 +81,26 @@ class manualMonitor:
      posB = int(times[strtTime2][1])
      while posA < posB:
             if not lines[posA].startswith("2022/"):
-
                 serviceDict1[lines[posA]] = "is running"
-                posA=posA+1
+            posA=posA+1
      #doing the same with the second time
-     posA = int(times[endTime][1])+1
+     posA = int(times[endTime][1])
      if endTime2 <len(times):
-         endTime2=int(times[endTime2][1])-1
+         endTime2=int(times[endTime2][1])
      else:
          endTime2=endTime2+1
      while posA < (endTime2):
             if not lines[posA].startswith("2022/"):
                 serviceDict2[lines[posA]] = "is running"
-                posA=posA+1
-     print(posA , len(times))
+            posA=posA+1
      if posA == len(lines)-1 or posA==len(lines)-2:
-            serviceDict2[lines[posA]] = "is running"
-            print("dd")
+          if not lines[posA].startswith("2022/"):
+            [lines[posA]] = "is running"
+
 
      #print the changes between the first time and second time
      str=""
-     # print(serviceDict2)
-     # print(serviceDict1)
+
 
      for key in serviceDict1:
         if serviceDict2.get(key) == None:
@@ -106,16 +110,13 @@ class manualMonitor:
         if serviceDict1.get(key)==None:
             str += "The service {} begin".format(key[0:(len(key)-1)])
             str += '\n'
-     print(str)
      return str
+# an example of how we run the program for checks
+# if __name__ == '__main__':
+    # s1="03/30/2022 08:30:55"
+    # s2="03/30/2022 08:31:10"
+    # m= monitor
+    # mm=manualMonitor()
+    # mm.start(s1,s2)
+    # # manualMonitor()
 
-if __name__ == '__main__':
-    s1="2022/03/27 19:55:54"
-    s2="2022/03/27 19:57:00"
-    m= monitor
-    mm=manualMonitor(m)
-    mm.start(s1,s2)
-    # manualMonitor()
-
-# 22-03-25 12:35:56
-# 2022-03-25 12:35:59
